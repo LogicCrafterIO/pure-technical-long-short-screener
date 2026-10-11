@@ -1,0 +1,26 @@
+# --- Secrets (never commit) ---
+.env
+.env.*
+*.token
+.gh_token
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# --- Vendored dependencies (regenerate with: pip install --target ./vendor plotly) ---
+vendor/
+
+# --- Generated / cached data ---
+cache/
+output/
+
+# --- macOS / editors ---
+.DS_Store
+.idea/
+.vscode/
+*.swp
