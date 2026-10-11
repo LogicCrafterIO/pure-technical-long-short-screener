@@ -776,12 +776,16 @@ def main() -> int:
         else:
             fail(f"copy column is not first: {first_th and first_th.group(1)}")
         order = list(t.columns) if t is not None else []
-        if "score" in order and "ticker" in order and \
-                order.index("score") == order.index("ticker") - 1:
-            ok(f"score sits immediately left of the ticker "
-               f"({order[:4]})")
+        lead = [c for c in order if c in ("rank_long", "rank_short")]
+        tail = [c for c in ("view #", "score") if c in order]
+        if lead == ["rank_long", "rank_short"] and order[:2] == lead and \
+                "ticker" in order and order.index("ticker") == 2 and \
+                tail and order[-len(tail):] == tail:
+            ok(f"Rank L / Rank S lead the row, # and Score at the far right "
+               f"({order[:4]} … {order[-2:]})")
         else:
-            fail(f"score is not left of ticker: {order[:6]}")
+            fail(f"model ranks are not leading the row: "
+                 f"{order[:6]} … {order[-3:]}")
 
     # -- one-click copy buttons, inside the table ----------------------------
     if len(frames) == 1:

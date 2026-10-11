@@ -163,8 +163,10 @@ visible page.
 * `Table` — the paged, column-configurable grid, with CSV export of exactly
   what you filtered. The first column is a **📋 Copy button** — pinned to the left
   so it stays put while you scroll right — and clicking it puts that ticker's
-  whole research prompt on the clipboard. The row reads `📋 | # | Score | Ticker`,
-  i.e. the ranking metric sits right next to the name. Headers are click-to-sort
+  whole research prompt on the clipboard. The row reads
+  `📋 | Rank L | Rank S | Ticker`, i.e. **the model's own ranks for that name sit
+  first** — readable at a glance — while the view row number and the composite
+  score move to the right-hand end of the row. Headers are click-to-sort
   (the current page), and the sidebar's column picker drives what the table shows.
 * `Research` — pick any name in the filtered set and copy its prompt; also
   builds a batch CSV of prompts for the top N of the current view (see

@@ -36,7 +36,7 @@ if os.path.isdir(_VENDOR):
 
 import config as C  # noqa: E402
 from prompt_ui import PROMPT_STYLES, copy_table, prompt_panel  # noqa: E402
-from prompt_ui import prompts_frame, rank_first  # noqa: E402
+from prompt_ui import prompts_frame, ranks_first  # noqa: E402
 from universe import normalise_sector  # noqa: E402
 
 try:
@@ -726,9 +726,11 @@ flegs = sorted([c for c in df_all.columns if c.startswith("f_")])
 
 _selected = [c for c in (st.session_state.get("f_cols") or []) if c in work.columns]
 # "view #" is the row number within the result set — deliberately not called
-# "rank" so it cannot be mistaken for the model's rank_long / rank_short
-# the copy buttons open the table, and the score sits next to the ticker
-show_cols = rank_first(["view #"] + _selected, "score", "ticker")
+# "rank" so it cannot be mistaken for the model's rank_long / rank_short.
+# Rank L / Rank S now take the leading slots (left of the ticker, so they are
+# readable at a glance) and "view #" / score move to the right-hand end; a
+# column set that omits the model ranks falls back to score-next-to-ticker.
+show_cols = ranks_first(["view #"] + _selected)
 
 
 # ==========================================================================

@@ -32,7 +32,7 @@ import data as D              # noqa: E402
 import screener as S          # noqa: E402
 import universe as U          # noqa: E402
 from prompt_ui import PROMPT_STYLES, copy_table, prompt_panel  # noqa: E402
-from prompt_ui import prompts_frame, rank_first  # noqa: E402
+from prompt_ui import prompts_frame  # noqa: E402
 
 try:
     import plotly.graph_objects as go
@@ -448,9 +448,10 @@ with tab_screen:
     k4.metric("Median RSI",
               f"{view_df['rsi14'].median():.1f}" if len(view_df) else "-")
 
-    # score immediately left of the ticker, so the ranking reads as one unit
-    show_cols = rank_first([c for c in C.DISPLAY_COLUMNS if c in view_df.columns],
-                           "score", "ticker")
+    # Rank L / Rank S lead the row — the model's verdict is what the reader
+    # scans for — and the view number and score sit at the right-hand end.
+    # Order comes straight from config.DISPLAY_COLUMNS.
+    show_cols = [c for c in C.DISPLAY_COLUMNS if c in view_df.columns]
     extra = [c for c in view_df.columns if c.startswith("f_") and c.endswith(side_key)]
     st.caption(f"Ranked by **{rank_preset}** • {len(view_df)} rows • "
                f"{len(all_flags)} optional flags available")

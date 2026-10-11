@@ -43,7 +43,8 @@ PROMPT_STYLES = {
 }
 
 __all__ = ["PROMPT_STYLES", "DEFAULT_HINT", "prompt_text", "prompt_panel",
-           "copy_table", "infer_columns", "rank_first", "read_copy_table",
+           "copy_table", "infer_columns", "rank_first", "ranks_first",
+           "read_copy_table",
            "selected_rows",
            "prompts_frame", "build_prompt", "build_short_prompt",
            "prompt_filename"]
@@ -255,6 +256,28 @@ def rank_first(cols: Sequence[str], rank_col: str = "score",
     cols.remove(rank_col)
     cols.insert(cols.index(anchor), rank_col)
     return cols
+
+
+def ranks_first(cols: Sequence[str], anchor: str = "ticker",
+                rank_col: str = "score") -> List[str]:
+    """Lead the table with the model's own ranks: `Rank L | Rank S | Ticker`.
+
+    `rank_long` / `rank_short` are what a row *is* — the screener's verdict on
+    the name — so they take the slots immediately left of the ticker, where the
+    eye lands first.  The view row number and the composite score, which used to
+    sit there, move to the right-hand end of the row.
+
+    Degrades to `rank_first()` when the model ranks are not in `cols` at all (a
+    column set that omits them), so the score still reads next to the ticker.
+    """
+    cols = list(cols)
+    leads = [c for c in ("rank_long", "rank_short") if c in cols]
+    if not leads:
+        return rank_first(cols, rank_col, anchor)
+    moved = [c for c in ("view #", "rank", rank_col) if c in cols]
+    body = [c for c in cols if c not in leads and c not in moved]
+    at = body.index(anchor) if anchor in body else 0
+    return body[:at] + leads + body[at:] + moved
 
 
 def _truthy(value: Any) -> bool:

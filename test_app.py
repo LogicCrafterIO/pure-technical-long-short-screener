@@ -169,11 +169,16 @@ def main() -> int:
     else:
         print("  FAIL  copy column is not first")
         return 1
-    if "score" in order and "ticker" in order and \
-            order.index("score") == order.index("ticker") - 1:
-        check(at, f"score sits immediately left of the ticker ({order[:4]})")
+    lead = [c for c in order if c in ("rank_long", "rank_short")]
+    tail = [c for c in ("rank", "score") if c in order]
+    if lead == ["rank_long", "rank_short"] and order[:2] == lead and \
+            "ticker" in order and order.index("ticker") == 2 and \
+            tail and order[-len(tail):] == tail:
+        check(at, f"Rank L / Rank S lead the row, # and Score at the far right "
+                  f"({order[:4]} … {order[-2:]})")
     else:
-        print(f"  FAIL  score is not left of ticker: {order[:6]}")
+        print(f"  FAIL  model ranks are not leading the row: "
+              f"{order[:6]} … {order[-3:]}")
         return 1
 
     dupes = [d for d in at.dataframe

@@ -160,13 +160,18 @@ DEFAULT_TOP_N = 50
 DEFAULT_MIN_PRICE = 5.0
 DEFAULT_MAX_PRICE = 500.0
 
-# Column ordering used by the dashboard table.
+# Column ordering used by the dashboard table — the literal left-to-right
+# order, so `Rank L | Rank S | Ticker` is what the reader sees first and the
+# view number (`rank`) and composite `score` sit at the right-hand end.
 # `stop`, `target` and `score` are resolved per-side by the app before render.
+# The CSV explorer applies the same rule to its own selection with
+# `prompt_ui.ranks_first`.
 DISPLAY_COLUMNS = [
-    "rank", "ticker", "name", "universe", "sector", "side",
-    "score", "close", "chg_1d_pct", "rsi14", "adx14",
+    "rank_long", "rank_short", "ticker", "name", "universe", "sector", "side",
+    "close", "chg_1d_pct", "rsi14", "adx14",
     "ret_3m", "ret_6m", "ret_12_1", "rs_ret_3m",
     "atr_pct", "dist_sma50_pct", "dist_sma200_pct",
     "avg_dollar_vol_m", "rvol", "pct_to_52w_high", "stop", "target",
     "risk_pct", "shares_for_1pct_risk", "flags",
+    "rank", "score",
 ]
